@@ -1,0 +1,121 @@
+body {
+    margin: 0;
+    font-family: 'Segoe UI', sans-serif;
+    background: #f4f4f9;
+    color: #333;
+}
+
+header {
+    background: linear-gradient(120deg, #667eea, #764ba2);
+    color: white;
+    padding: 60px 20px;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+    font-size: 20px;
+}
+
+header p {
+    margin-top: 10px;
+    font-size: 20px;
+}
+
+section {
+    padding: 40px 20px;
+    max-width: 800px;
+    margin: auto;
+}
+
+h2 {
+    border-bottom: 2px solid #ccc;
+    padding-bottom: 10px;
+}
+
+.content-row {
+    display: flex;
+    justify-content: flex-start;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.intro-box {
+    flex: 1;
+    min-width: 300px;
+    max-width: 148%;
+    padding: 20px;
+    background: white;
+    border: 2px solid #ccc;
+    border-radius: 10px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    text-align: center;
+    position: relative;
+    margin-right: auto;
+}
+
+.intro-text {
+    display: none;
+    margin-top: 15px;
+    font-size: 16px;
+    color: #333;
+}
+
+.intro-box:hover >.intro-text {
+    display: block;
+    transition: 6s ease-in;
+   
+}
+
+.intro-hint {
+    display: block;
+    font-weight: bold;
+    color: #555;
+}
+
+.intro-box:hover .intro-hint {
+    display: none;
+}
+
+.project {
+    flex: 1;
+    min-width: 300px;
+    max-width: 48%;
+    margin-top: 20px;
+    padding: 20px;
+    background: white;
+    text-align: center;
+}
+
+footer {
+    background: none;
+    color: #333;
+    text-align: right;
+    padding: 20px;
+    margin-top: 40px;
+}
+
+.profile-img {
+    width: 120px;
+    height: 120px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-bottom: 15px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.contact-button {
+    display: inline-block;
+    margin-top: 20px;
+    padding: 12px 24px;
+    background-color: #243283;
+    color: white;
+    border-radius: 5px;
+    text-decoration: none;
+    font-size: 18px;
+    transition: background-color 0.3s;
+}
+
+.contact-button:hover {
+    background-color: #5a67d8;
+}

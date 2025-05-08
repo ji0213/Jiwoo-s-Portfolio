@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Q/A</title>
+  <link rel="stylesheet" href="qa-style.css" />
+</head>
+<body>
+  <header>
+    <a href="Untitled-1.html" class="contact-button">home</a>
+    <a href="#" class="contact-button" onclick="event.preventDefault();">Q/A</a>
+  </header>
+
+  <section>
+    <h2>문의하실 내용을 작성해주세요~!</h2>
+    <form id="contact-form">
+      <label for="name">성명</label>
+      <input type="text" id="name" name="name" required />
+      <label for="message">내용</label>
+      <textarea id="message" name="message" rows="10" required></textarea>
+      <button type="submit">등록</button>
+    </form>
+
+    <h3>등록된 내용</h3>
+    <div id="messages" class="messages"></div>
+  </section>
+
+  <footer>e-mail (ji_0213@naver.com)</footer>
+
+  <!-- Firebase SDK 추가 -->
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyBhHNqCQhtDPlz_7apgm2AOcgo2EA518jI",
+      authDomain: "qa-app-e7a15.firebaseapp.com",
+      projectId: "qa-app-e7a15",
+      storageBucket: "qa-app-e7a15.firebasestorage.app",
+      messagingSenderId: "698870671869",
+      appId: "1:698870671869:web:d6a4eeeefc86b347c7d194",
+      measurementId: "G-F5XGGNMN8V"
+    };  
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.firestore();
+
+    const form = document.getElementById("contact-form");
+    const messagesDiv = document.getElementById("messages");
+    let currentUser = localStorage.getItem("currentUser") || null;
+
+    function renderMessages() {
+      messagesDiv.innerHTML = "";
+
+      db.collection("messages").orderBy("time", "desc").onSnapshot(snapshot => {
+        if (snapshot.empty) {
+          messagesDiv.innerHTML = `<div class="no-messages">등록된 내용이 없습니다.</div>`;
+          return;
+        }
+
+        snapshot.forEach(doc => {
+          const data = doc.data();
+          const messageItem = document.createElement("div");
+          messageItem.className = "message-item";
+
+          const dateStr = data.time?.toDate().toLocaleString() || "";
+
+          messageItem.innerHTML = `
+            <strong>보낸사람 : </strong> ${data.name}<br>
+            <strong>내용 : </strong> ${data.message}<br>
+            <small>등록된 시간 : ${dateStr}</small>
+            <button class="delete-btn">삭제</button>
+          `;
+
+          messageItem.querySelector(".delete-btn").addEventListener("click", () => {
+            if (confirm("정말 삭제하시겠습니까?")) {
+              db.collection("messages").doc(doc.id).delete();
+            }
+          });
+
+          const repliesDiv = document.createElement("div");
+          repliesDiv.className = "replies";
+
+          (data.replies || []).forEach((reply, rIndex) => {
+            const replyEl = document.createElement("div");
+            replyEl.className = "reply-item";
+            const displayName = (reply.name === currentUser) ? reply.name : "최지우";
+            replyEl.innerHTML = `
+              <strong>${displayName}</strong>: ${reply.text}<br>
+              <small style="font-size: 12px; color: #555;">${reply.time}</small>
+              <button class="delete-reply" style="margin-top:5px; font-size:12px;">삭제</button>
+            `;
+            replyEl.querySelector(".delete-reply").addEventListener("click", () => {
+              const newReplies = (data.replies || []).filter((_, i) => i !== rIndex);
+              db.collection("messages").doc(doc.id).update({ replies: newReplies });
+            });
+            repliesDiv.appendChild(replyEl);
+          });
+
+          if (currentUser && (currentUser === data.name || currentUser === "최지우")) {
+            const replyForm = document.createElement("form");
+            replyForm.className = "reply-form";
+            replyForm.innerHTML = `
+              <input type="text" class="reply-input" placeholder="답글을 입력하세요" required />
+              <button type="submit">답글 달기</button>
+            `;
+            replyForm.addEventListener("submit", (e) => {
+              e.preventDefault();
+              const input = replyForm.querySelector(".reply-input");
+              const text = input.value.trim();
+              if (!text) return;
+              const newReply = {
+                text,
+                time: new Date().toLocaleString(),
+                name: (currentUser === "최지우" ? "최지우" : currentUser)
+              };
+              const updatedReplies = (data.replies || []).concat(newReply);
+              db.collection("messages").doc(doc.id).update({ replies: updatedReplies });
+              input.value = "";
+            });
+
+            messageItem.appendChild(replyForm);
+          }
+
+          messageItem.appendChild(repliesDiv);
+          messagesDiv.appendChild(messageItem);
+        });
+      });
+    }
+
+    form.addEventListener("submit", (e) => {
+      e.preventDefault();
+      const name = document.getElementById("name").value.trim();
+      const message = document.getElementById("message").value.trim();
+      if (!name || !message) return;
+      currentUser = name;
+      localStorage.setItem("currentUser", currentUser);
+
+      db.collection("messages").add({
+        name,
+        message,
+        time: firebase.firestore.FieldValue.serverTimestamp(),
+        replies: []
+      });
+
+      form.reset();
+    });
+
+    renderMessages();
+  </script>
+</body>
+</html>
