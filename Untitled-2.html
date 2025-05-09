@@ -3,153 +3,35 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Q/A</title>
+  <title>Q&A</title>
   <link rel="stylesheet" href="./css/qa-style.css" />
 </head>
+
 <body>
   <header>
     <a href="Untitled-1.html" class="contact-button">home</a>
-    <a href="#" class="contact-button" onclick="event.preventDefault();">Q/A</a>
+    <a href="Untitled-2.html" class="contact-button">Q&A</a>
   </header>
 
   <section>
-    <h2>문의하실 내용을 작성해주세요~!</h2>
-    <form id="contact-form">
-      <label for="name">성명</label>
-      <input type="text" id="name" name="name" required />
-      <label for="message">내용</label>
-      <textarea id="message" name="message" rows="10" required></textarea>
-      <button type="submit">등록</button>
-    </form>
-
-    <h3>등록된 내용</h3>
-    <div id="messages" class="messages"></div>
+    <div class="content-row">
+      <div class="project">
+        <div class="project">
+          <h3>ㅁㄴ오라ㅓㅁ농라ㅣㅓㅁㄴㅇ</h3>
+          <p>sjdhfkalsjhdfklajsdh</p>
+        </div>
+        <div class="project">
+          <h3>ㅁㄴ오라ㅓㅁ농라ㅣㅓㅁㄴㅇ</h3>
+          <p>sjdhfkalsjhdfklajsdh</p>
+        </div>
+        <div class="project">
+          <h3>ㅁㄴ오라ㅓㅁ농라ㅣㅓㅁㄴㅇ</h3>
+          <p>sjdhfkalsjhdfklajsdh</p>
+        </div>
+      </div>
+    </div>
   </section>
 
   <footer>e-mail (ji_0213@naver.com)</footer>
-
-  <script>
-    const form = document.getElementById("contact-form");
-    const messagesDiv = document.getElementById("messages");
-    let currentUser = localStorage.getItem("currentUser") || null;
-
-    function loadMessages() {
-      return JSON.parse(localStorage.getItem("messages") || "[]");
-    }
-
-    function saveMessages(messages) {
-      localStorage.setItem("messages", JSON.stringify(messages));
-    }
-
-    function renderMessages() {
-      const messages = loadMessages();
-      messagesDiv.innerHTML = "";
-
-      if (messages.length === 0) {
-        messagesDiv.innerHTML = `<div class="no-messages">등록된 내용이 없습니다.</div>`;
-        return;
-      }
-
-      messages.forEach((data, index) => {
-        const messageItem = document.createElement("div");
-        messageItem.className = "message-item";
-
-        const dateStr = new Date(data.time).toLocaleString();
-
-        messageItem.innerHTML = `
-          <strong>보낸사람 : </strong> ${data.name}<br>
-          <strong>내용 : </strong> ${data.message}<br>
-          <small>등록된 시간 : ${dateStr}</small>
-          <button class="delete-btn">삭제</button>
-        `;
-
-        messageItem.querySelector(".delete-btn").addEventListener("click", () => {
-          if (confirm("정말 삭제하시겠습니까?")) {
-            messages.splice(index, 1);
-            saveMessages(messages);
-            renderMessages();
-          }
-        });
-
-        const repliesDiv = document.createElement("div");
-        repliesDiv.className = "replies";
-
-        (data.replies || []).forEach((reply, rIndex) => {
-          const replyEl = document.createElement("div");
-          replyEl.className = "reply-item";
-          const displayName = (reply.name === currentUser) ? reply.name : "최지우";
-
-          replyEl.innerHTML = `
-            <strong>${displayName}</strong>: ${reply.text}<br>
-            <small style="font-size: 12px; color: #555;">${reply.time}</small>
-            <button class="delete-reply" style="margin-top:5px; font-size:12px;">삭제</button>
-          `;
-
-          replyEl.querySelector(".delete-reply").addEventListener("click", () => {
-            data.replies.splice(rIndex, 1);
-            saveMessages(messages);
-            renderMessages();
-          });
-
-          repliesDiv.appendChild(replyEl);
-        });
-
-        if (currentUser && (currentUser === data.name || currentUser === "최지우")) {
-          const replyForm = document.createElement("form");
-          replyForm.className = "reply-form";
-          replyForm.innerHTML = `
-            <input type="text" class="reply-input" placeholder="답글을 입력하세요" required />
-            <button type="submit">답글 달기</button>
-          `;
-          replyForm.addEventListener("submit", (e) => {
-            e.preventDefault();
-            const input = replyForm.querySelector(".reply-input");
-            const text = input.value.trim();
-            if (!text) return;
-
-            const newReply = {
-              text,
-              time: new Date().toLocaleString(),
-              name: (currentUser === "최지우" ? "최지우" : currentUser)
-            };
-
-            data.replies = data.replies || [];
-            data.replies.push(newReply);
-            saveMessages(messages);
-            renderMessages();
-          });
-
-          messageItem.appendChild(replyForm);
-        }
-
-        messageItem.appendChild(repliesDiv);
-        messagesDiv.appendChild(messageItem);
-      });
-    }
-
-    form.addEventListener("submit", (e) => {
-      e.preventDefault();
-      const name = document.getElementById("name").value.trim();
-      const message = document.getElementById("message").value.trim();
-      if (!name || !message) return;
-
-      currentUser = name;
-      localStorage.setItem("currentUser", currentUser);
-
-      const messages = loadMessages();
-      messages.unshift({
-        name,
-        message,
-        time: new Date().toISOString(),
-        replies: []
-      });
-
-      saveMessages(messages);
-      form.reset();
-      renderMessages();
-    });
-
-    renderMessages();
-  </script>
 </body>
 </html>
