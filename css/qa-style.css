@@ -40,17 +40,7 @@ h2 {
   flex-wrap: wrap;
 }
 
-.intro-box {
-  flex: 1;
-  min-width: 300px;
-  max-width: 148%;
-  padding: 20px;
-  background: white;
-  border: 2px solid #ccc;
-  border-radius: 10px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-  text-align: center;
-}
+
 
 .intro-text {
   display: none;
@@ -62,12 +52,12 @@ h2 {
 
 .project {
   flex: 1;
-  min-width: 750px;
+  min-width: 500px;
   max-width: 48%;
   margin-top: 20px;
   padding: 20px;
   background: white;
-  text-align: center;
+  text-align: left;
 }
 
 footer {
@@ -78,7 +68,7 @@ footer {
   margin-top: 40px;
 }
 .contact-button {
-  display: inline-block;
+  display:inline-block;
   margin-top: 20px;
   padding: 12px 24px;
   background-color: #243283;
