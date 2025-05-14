@@ -82,3 +82,39 @@ footer {
 .contact-button:hover {
   background-color: #5a67d8;
 }
+
+.intro-box:hover >.intro-text {
+  display: block;
+  transition: 6s ease-in;
+ 
+}
+
+.intro-hint {
+  display: block;
+  font-weight: bold;
+  color: #555;
+}
+
+.intro-box:hover .intro-hint {
+  display: none;
+}
+.intro-box {
+  flex: 1;
+  min-width: 300px;
+  max-width: 148%;
+  padding: 20px;
+  background: white;
+  border: 2px solid #ccc;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+  text-align: left;
+  position: relative;
+  margin-right: auto;
+}
+
+.profile-img {
+  width: 300px;
+  height: 120px;
+  object-fit: contain;
+  margin-bottom: 15px;
+}
