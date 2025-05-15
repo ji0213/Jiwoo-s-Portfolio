@@ -40,15 +40,12 @@ h2 {
   flex-wrap: wrap;
 }
 
-
-
 .intro-text {
   display: none;
   margin-top: 15px;
   font-size: 16px;
   color: #333;
 }
-
 
 .project {
   flex: 1;
